@@ -12,24 +12,17 @@ class SomeModel:
             pred_data (dict): Словарь, содержащий данные о предсказаниях
                             для различных книг.
     """
-    def __init__(self, pred_data=None) -> None:
+    def __init__(self) -> None:
         """
             Инициализирует экземпляр SomeModel.
-
-            Args:
-                pred_data (dict, optional): Словарь с предсказаниями.
-                Если не указан, используется предопределенный набор данных.
         """
-        if pred_data is None:
-            self.pred_data = {
-                "Чапаев и пустота": 0.81,
-                "Generation Пи": 0.7,
-                "Empire V": 0.5,
-                "Жизнь насекомых": 0.4,
-                "Вулкан": 0.2
-            }
-        else:
-            self.pred_data = pred_data
+        self.pred_data = {
+            "Чапаев и пустота": 0.81,
+            "Generation Пи": 0.7,
+            "Empire V": 0.5,
+            "Жизнь насекомых": 0.4,
+            "Вулкан": 0.2
+        }
 
     def predict(self, message: str) -> float:
         """
