@@ -1,18 +1,44 @@
+"""
+    В файле реализован генератор для поиска строк в текстовом файле
+"""
 import os
 
 
-def find_line(str_file, search_words, stop_words):
+def find_line(str_file, search_words_list, stop_words_list):
+    """Ищет строки в файле, содержащие искомые слова и
+        игнорирует строки со стоп-словами.
+
+    Args:
+        file (file/str): Путь к файлу или файловый объект.
+        search_words_list (list[str]): Список слов, которые необходимо
+                                        найти в строках.
+        stop_words_list (list[str]): Список слов, которые игнорируют строки.
+
+    Yields:
+        str: Строки, содержащие искомые слова.
+    """
     for line in str_file:
         words_in_line = line.lower().strip().split()
 
-        if any(word in stop_words for word in words_in_line):
+        if any(word in stop_words_list for word in words_in_line):
             continue
 
-        if any(word in search_words for word in words_in_line):
+        if any(word in search_words_list for word in words_in_line):
             yield line.strip()
 
 
 def file_search_generator(file, search_words, stop_words):
+    """Генератор, ищет содержащие искомые слова и не содержащие стоп-слова.
+
+    Args:
+        file (file/str): Путь к файлу или файловый объект.
+        search_words (list[str]): Список слов, которые необходимо
+                                    найти в строках.
+        stop_words (list[str]): Список слов, которые игнорируют строки.
+
+    Yields:
+        str: Строки, содержащие искомые слова.
+    """
     if ((not isinstance(search_words, list)) or
             (not all(isinstance(word, str) for word in search_words))):
         raise TypeError("Список слов для поиска должен быть списком строк")
@@ -37,9 +63,9 @@ def file_search_generator(file, search_words, stop_words):
 
 
 if __name__ == '__main__':
-    search_words = ['роза']
-    stop_words = ['стопслово']
+    words_to_find = ['роза']
+    words_to_stop = ['стопслово']
 
     for matching_line in file_search_generator(
-            "fish_text.txt", search_words, stop_words):
+            "fish_text.txt", words_to_find, words_to_stop):
         print(matching_line)

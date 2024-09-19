@@ -1,8 +1,25 @@
+"""
+    В файле реализована функция для проставления оценки на основе рейтинга книги
+"""
 import time
 
 
 class SomeModel:
+    """
+        Класс для моделирования предсказаний на основе заданных данных.
+
+        Attributes:
+            pred_data (dict): Словарь, содержащий данные о предсказаниях
+                            для различных книг.
+    """
     def __init__(self, pred_data=None) -> None:
+        """
+            Инициализирует экземпляр SomeModel.
+
+            Args:
+                pred_data (dict, optional): Словарь с предсказаниями.
+                Если не указан, используется предопределенный набор данных.
+        """
         if pred_data is None:
             self.pred_data = {
                 "Чапаев и пустота": 0.81,
@@ -15,6 +32,15 @@ class SomeModel:
             self.pred_data = pred_data
 
     def predict(self, message: str) -> float:
+        """
+            Возвращает предсказанное значение для данного сообщения.
+
+            Args:
+                message (str): Сообщение для предсказания.
+
+            Returns:
+                float: Предсказанное значение (от 0.0 до 1.0).
+        """
         if not isinstance(message, str):
             raise TypeError("message должен быть типа str")
 
@@ -23,12 +49,32 @@ class SomeModel:
             return self.pred_data[message]
         return 0.5
 
+    def get_dict(self):
+        """
+            Метод для обхода pylint: predictor.py:
+            7:0: R0903: Too few public methods (1/2) (too-few-public-methods)
+        """
+        return self.pred_data
+
 
 def predict_message_mood(
     message: str,
     bad_thresholds: float = 0.3,
     good_thresholds: float = 0.8,
 ) -> str:
+    """
+        Определяет оценку книги на основе пороговых значений.
+
+        Args:
+            message (str): Сообщение для оценки.
+            bad_thresholds (float, optional): нижний порог. По умолчанию 0.3.
+            good_thresholds (float, optional): верхний порог. По умолчанию 0.8.
+
+
+        Returns:
+            str: "неуд" если < bad_thresholds, "отл" если >good_thresholds,
+                    "норм" если между.
+    """
 
     if (bad_thresholds > 1 or bad_thresholds < 0 or
             good_thresholds < 0 or good_thresholds > 1):
@@ -47,10 +93,10 @@ def predict_message_mood(
 
     if prediction < bad_thresholds:
         return "неуд"
-    elif prediction > good_thresholds:
+    if prediction > good_thresholds:
         return "отл"
-    else:
-        return "норм"
+
+    return "норм"
 
 
 if __name__ == '__main__':
