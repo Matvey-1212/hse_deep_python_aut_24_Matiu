@@ -1,5 +1,6 @@
 import os
 
+
 def find_line(str_file, search_words, stop_words):
     for line in str_file:
         words_in_line = line.lower().strip().split()
@@ -12,10 +13,11 @@ def find_line(str_file, search_words, stop_words):
 
 
 def file_searche_generator(file, search_words, stop_words):
-
-    if not isinstance(search_words, list) or not all(isinstance(word, str) for word in search_words):
+    if (not isinstance(search_words, list) or
+            not all(isinstance(word, str) for word in search_words)):
         raise TypeError("Список слов для поиска должен быть списком строк.")
-    if not isinstance(stop_words, list) or not all(isinstance(word, str) for word in stop_words):
+    if (not isinstance(stop_words, list) or
+            not all(isinstance(word, str) for word in stop_words)):
         raise TypeError("Список стоп-слов должен быть списком строк.")
 
     search_words = set(word.lower() for word in search_words)
@@ -32,5 +34,6 @@ if __name__ == '__main__':
     search_words = ['роза']
     stop_words = ['стопслово']
 
-    for matching_line in file_searche_generator("fish_text.txt", search_words, stop_words):
+    for matching_line in file_searche_generator("fish_text.txt",
+                                                search_words, stop_words):
         print(matching_line)
