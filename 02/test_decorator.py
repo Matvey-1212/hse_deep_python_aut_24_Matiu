@@ -154,7 +154,7 @@ class TestRetryDeco(unittest.TestCase):
             add(4, 2)
             mocked_print.assert_called_with(
                 'run "add" with positional args = (4, 2), ' +
-                    'attempt = 1, result = 6',
+                'attempt = 1, result = 6',
                 end='\n\n'
                 )
 
@@ -204,18 +204,18 @@ class TestRetryDeco(unittest.TestCase):
             check_str(value=None)
             expected_calls = [
                 unittest.mock.call(
-                    'run "check_str" with keyword kwargs = {\'value\': None}, ' +
-                        'attempt = 1, exception = ValueError',
+                    'run "check_str" with keyword kwargs = {\'value\': None},' +
+                    ' attempt = 1, exception = ValueError',
                     end='\n'
                     ),
                 unittest.mock.call(
-                    'run "check_str" with keyword kwargs = {\'value\': None}, ' +
-                        'attempt = 2, exception = ValueError',
+                    'run "check_str" with keyword kwargs = {\'value\': None},' +
+                    ' attempt = 2, exception = ValueError',
                     end='\n'
                     ),
                 unittest.mock.call(
-                    'run "check_str" with keyword kwargs = {\'value\': None}, ' +
-                        'attempt = 3, exception = ValueError',
+                    'run "check_str" with keyword kwargs = {\'value\': None},' +
+                    ' attempt = 3, exception = ValueError',
                     end='\n\n'
                     )
             ]
@@ -235,7 +235,7 @@ class TestRetryDeco(unittest.TestCase):
             check_int(value=None)
             mocked_print.assert_called_once_with(
                 'run "check_int" with keyword kwargs = {\'value\': None}, ' +
-                    'attempt = 1, exception = ValueError',
+                'attempt = 1, exception = ValueError',
                 end='\n\n'
                 )
 
