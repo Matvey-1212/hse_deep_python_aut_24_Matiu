@@ -51,7 +51,7 @@ class TestPredictMessageMood(unittest.TestCase):
         для некорректных пороговых значений
         """
         with self.assertRaises(ValueError):
-            predict_message_mood("Чапаев и пустота", -0.1, 0.8) 
+            predict_message_mood("Чапаев и пустота", -0.1, 0.8)
 
         with self.assertRaises(ValueError):
             predict_message_mood("Чапаев и пустота", -0.9, -0.8)
