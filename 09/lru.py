@@ -4,6 +4,7 @@
     в порядке их последнего обращения и
     словаря для хранения ссылок на элементы списка
 """
+# pylint: disable=R0801
 import logging
 import argparse
 import sys
