@@ -5,7 +5,7 @@ from setuptools import setup, Extension
 
 
 def run():
-    """ 
+    """
     run
     """
     setup(
