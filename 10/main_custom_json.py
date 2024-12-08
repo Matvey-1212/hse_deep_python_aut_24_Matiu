@@ -20,7 +20,7 @@ def main():
     json_doc = json.loads(json_str)
     t2 = time.time() - t
     t = time.time()
-    cust_json_doc = custom_json.loads(json_str) # pylint: disable=I1101
+    cust_json_doc = custom_json.loads(json_str)  # pylint: disable=I1101
     t3 = time.time() - t
     print(t2, t3)
 
@@ -30,7 +30,7 @@ def main():
     json_str_1 = json.dumps(json_doc)
     t2 = time.time() - t
     t = time.time()
-    json_str_2 = custom_json.dumps(json_doc) # pylint: disable=I1101
+    json_str_2 = custom_json.dumps(json_doc)  # pylint: disable=I1101
     t3 = time.time() - t
     print(t2, t3)
     assert json_str_1 == json_str_2

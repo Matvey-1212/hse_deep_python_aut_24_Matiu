@@ -19,27 +19,27 @@ class TestCustomJson(unittest.TestCase):
         """
         json_string = '{"hello": 10, "world": "value"}'
         expected = {'hello': 10, 'world': 'value'}
-        result = custom_json.loads(json_string) # pylint: disable=I1101
+        result = custom_json.loads(json_string)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         json_string = '{"hello": 10, \t "world": \n"value"}'
         expected = {'hello': 10, 'world': 'value'}
-        result = custom_json.loads(json_string) # pylint: disable=I1101
+        result = custom_json.loads(json_string)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         json_string = '{"a": 100, "b": 0.5, "c": -42, "d": 0.0001}'
         expected = {'a': 100, 'b': 0.5, 'c': -42, 'd': 1e-4}
-        result = custom_json.loads(json_string) # pylint: disable=I1101
+        result = custom_json.loads(json_string)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         json_string = '{}'
         expected = {}
-        result = custom_json.loads(json_string) # pylint: disable=I1101
+        result = custom_json.loads(json_string)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         json_string = '{"key": ""}'
         expected = {'key': ''}
-        result = custom_json.loads(json_string) # pylint: disable=I1101
+        result = custom_json.loads(json_string)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
     def test_custom_json_dumps(self):
@@ -48,22 +48,22 @@ class TestCustomJson(unittest.TestCase):
         """
         data = {'hello': 10, 'world': 'value'}
         expected = '{"hello": 10, "world": "value"}'
-        result = custom_json.dumps(data) # pylint: disable=I1101
+        result = custom_json.dumps(data)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         data = {'a': 100, 'b': 0.5, 'c': -42, 'd': 1e-4, 'e': 0.0}
         expected = '{"a": 100, "b": 0.5, "c": -42, "d": 0.0001, "e": 0.0}'
-        result = custom_json.dumps(data) # pylint: disable=I1101
+        result = custom_json.dumps(data)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         data = {}
         expected = '{}'
-        result = custom_json.dumps(data) # pylint: disable=I1101
+        result = custom_json.dumps(data)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
         data = {'key': ''}
         expected = '{"key": ""}'
-        result = custom_json.dumps(data) # pylint: disable=I1101
+        result = custom_json.dumps(data)  # pylint: disable=I1101
         self.assertEqual(result, expected)
 
     def test_json_comparison(self):
@@ -79,11 +79,12 @@ class TestCustomJson(unittest.TestCase):
             with open(test_file, 'r', encoding='utf-8') as f:
                 data = f.read()
 
-            custom_json_result = custom_json.loads(data) # pylint: disable=I1101
+            # pylint: disable=I1101
+            custom_json_result = custom_json.loads(data)
             json_result = json.loads(data)
             self.assertEqual(custom_json_result, json_result)
-
-            custom_json_result = custom_json.dumps(custom_json_result) # pylint: disable=I1101
+            # pylint: disable=I1101
+            custom_json_result = custom_json.dumps(custom_json_result)
             json_result = json.dumps(json_result)
             self.assertEqual(custom_json_result, json_result)
 
@@ -105,14 +106,15 @@ class TestCustomJson(unittest.TestCase):
                 large_json = f.read()
 
             start_time = time.time()
-            custom_json.loads(large_json) # pylint: disable=I1101
+            custom_json.loads(large_json)  # pylint: disable=I1101
             custom_json_duration = time.time() - start_time
             print(f"custom_json.loads на {test_file}: "
                   f"{custom_json_duration:.4f} секунд")
             self.assertGreater(custom_json_duration, 0.1)
 
             start_time = time.time()
-            custom_json.dumps(custom_json.loads(large_json)) # pylint: disable=I1101
+            # pylint: disable=I1101
+            custom_json.dumps(custom_json.loads(large_json))
             custom_json_dumps_duration = time.time() - start_time
             print(f"custom_json.dumps на {test_file}: "
                   f"{custom_json_dumps_duration:.4f} секунд")
