@@ -32,7 +32,6 @@ class TestSearchInFile(unittest.TestCase):
         self.test_file.write("розана\n")
         self.test_file.write("азора\n")
         self.test_file.write("рОз роза\n")
-
         self.test_file.seek(0)
 
     def test_search_word_found(self):
