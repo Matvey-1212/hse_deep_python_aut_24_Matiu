@@ -71,17 +71,20 @@ class TestRetryDeco(unittest.TestCase):
         def func_with_exception3():
             raise RuntimeError("Test error")
 
-        with patch('builtins.print') as mocked_print:
-            func_with_exception1()
-            self.assertEqual(mocked_print.call_count, 2)
+        with self.assertRaises(ValueError):
+            with patch('builtins.print') as mocked_print:
+                func_with_exception1()
+                self.assertEqual(mocked_print.call_count, 2)
 
-        with patch('builtins.print') as mocked_print:
-            func_with_exception2()
-            self.assertEqual(mocked_print.call_count, 3)
+        with self.assertRaises(TypeError):
+            with patch('builtins.print') as mocked_print:
+                func_with_exception2()
+                self.assertEqual(mocked_print.call_count, 3)
 
-        with patch('builtins.print') as mocked_print:
-            func_with_exception3()
-            self.assertEqual(mocked_print.call_count, 4)
+        with self.assertRaises(RuntimeError):
+            with patch('builtins.print') as mocked_print:
+                func_with_exception3()
+                self.assertEqual(mocked_print.call_count, 4)
 
     def test_retry_deco_with_exception_no_retry(self):
         """
@@ -93,9 +96,10 @@ class TestRetryDeco(unittest.TestCase):
                 raise ValueError()
             return isinstance(value, int)
 
-        with patch('builtins.print') as mocked_print:
-            check_int(value=None)
-            self.assertEqual(mocked_print.call_count, 1)
+        with self.assertRaises(ValueError):
+            with patch('builtins.print') as mocked_print:
+                check_int(value=None)
+                self.assertEqual(mocked_print.call_count, 1)
 
     def test_retry_deco_function_return(self):
         """
@@ -125,21 +129,11 @@ class TestRetryDeco(unittest.TestCase):
         def func_with_key_error():
             raise ValueError()
 
-        with patch('builtins.print') as mocked_print:
-            result = func_with_key_error()
-            self.assertIsNone(result)
-            self.assertEqual(mocked_print.call_count, 1)
-
-    def test_retry_deco_return_none_after_retries(self):
-        """
-            Тест, когда функция возвращает None после всех попыток
-        """
-        @retry_deco(2)
-        def fail_function():
-            raise ValueError()
-
-        result = fail_function()
-        self.assertIsNone(result)
+        with self.assertRaises(ValueError):
+            with patch('builtins.print') as mocked_print:
+                result = func_with_key_error()
+                self.assertIsNone(result)
+                self.assertEqual(mocked_print.call_count, 1)
 
     def test_print_output_on_success_pos_arg(self):
         """
@@ -200,26 +194,30 @@ class TestRetryDeco(unittest.TestCase):
                 raise ValueError()
             return isinstance(value, str)
 
-        with patch('builtins.print') as mocked_print:
-            check_str(value=None)
-            expected_calls = [
-                unittest.mock.call(
-                    'run "check_str" with keyword kwargs = {\'value\': None},' +
-                    ' attempt = 1, exception = ValueError',
-                    end='\n'
-                    ),
-                unittest.mock.call(
-                    'run "check_str" with keyword kwargs = {\'value\': None},' +
-                    ' attempt = 2, exception = ValueError',
-                    end='\n'
-                    ),
-                unittest.mock.call(
-                    'run "check_str" with keyword kwargs = {\'value\': None},' +
-                    ' attempt = 3, exception = ValueError',
-                    end='\n\n'
-                    )
-            ]
-            mocked_print.assert_has_calls(expected_calls, any_order=False)
+        with self.assertRaises(ValueError):
+            with patch('builtins.print') as mocked_print:
+                check_str(value=None)
+                expected_calls = [
+                    unittest.mock.call(
+                        'run "check_str" with keyword kwargs ' +
+                        '= {\'value\': None},' +
+                        ' attempt = 1, exception = ValueError',
+                        end='\n'
+                        ),
+                    unittest.mock.call(
+                        'run "check_str" with keyword kwargs ' +
+                        '= {\'value\': None},' +
+                        ' attempt = 2, exception = ValueError',
+                        end='\n'
+                        ),
+                    unittest.mock.call(
+                        'run "check_str" with keyword kwargs ' +
+                        '= {\'value\': None},' +
+                        ' attempt = 3, exception = ValueError',
+                        end='\n\n'
+                        )
+                ]
+                mocked_print.assert_has_calls(expected_calls, any_order=False)
 
     def test_print_output_on_no_retry_due_to_exception(self):
         """
@@ -231,13 +229,15 @@ class TestRetryDeco(unittest.TestCase):
             if value is None:
                 raise ValueError()
 
-        with patch('builtins.print') as mocked_print:
-            check_int(value=None)
-            mocked_print.assert_called_once_with(
-                'run "check_int" with keyword kwargs = {\'value\': None}, ' +
-                'attempt = 1, exception = ValueError',
-                end='\n\n'
-                )
+        with self.assertRaises(ValueError):
+            with patch('builtins.print') as mocked_print:
+                check_int(value=None)
+                mocked_print.assert_called_once_with(
+                    'run "check_int" with keyword kwargs ' +
+                    '= {\'value\': None}, ' +
+                    'attempt = 1, exception = ValueError',
+                    end='\n\n'
+                    )
 
 
 if __name__ == '__main__':

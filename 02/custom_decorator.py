@@ -23,6 +23,7 @@ def retry_deco(
         @wraps(func)
         def wrapper(*args, **kwargs):
             attempt = 1
+            allowed_exceptions_tuple = tuple(exceptions) if exceptions else ()
             while attempt <= retries:
                 output = ''
                 output += f'run "{func.__name__}"'
@@ -39,15 +40,22 @@ def retry_deco(
                     output += f"attempt = {attempt}, result = {result}"
                     print(output, end='\n\n')
                     return result
+                except allowed_exceptions_tuple as e:
+                    exception_name = type(e).__name__
+                    output += (
+                        f", attempt = {attempt}, "
+                        f"allowed exception = {exception_name}"
+                    )
+                    print(output)
+                    raise
                 except Exception as e:  # pylint: disable=broad-exception-caught
-                    output += f"attempt = {attempt}, "
-                    output += f"exception = {type(e).__name__}"
-                    if ((exceptions is not None) and
-                            (any(isinstance(e, exc) for exc in exceptions))):
-                        print(output, end='\n\n')
-                        break
+                    exception_name = type(e).__name__
+                    output += (f", attempt = {attempt}, "
+                               f"exception = {exception_name}")
+                    print(output)
+                    if attempt == retries:
+                        raise
                     attempt += 1
-                    print(output, end='\n' if attempt <= retries else '\n\n')
             return None
         return wrapper
     return decorator
@@ -97,9 +105,15 @@ if __name__ == '__main__':
 
     check_str(value="123")
     check_str(value=1)
-    check_str(value=None)
+    try:
+        check_str(value=None)
+    except Exception:  # pylint: disable=broad-exception-caught
+        print('Catch exception')
 
     check_int(value=1)
-    check_int(value=None)
+    try:
+        check_int(value=None)
+    except Exception:  # pylint: disable=broad-exception-caught
+        print('Catch exception')
 
     check_empty()
