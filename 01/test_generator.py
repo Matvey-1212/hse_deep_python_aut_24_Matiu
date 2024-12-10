@@ -24,6 +24,15 @@ class TestSearchInFile(unittest.TestCase):
         self.test_file.write("Азора не должна учитыватья\n")
         self.test_file.write("роза Роза Роз\n")
         self.test_file.write("конец, точно конец\n")
+        self.test_file.write("розан\n")
+        self.test_file.write("РоЗА на траве роз\n")
+        self.test_file.write("розанА на траве\n")
+        self.test_file.write("роза\n")
+        self.test_file.write("рОзА\n")
+        self.test_file.write("розана\n")
+        self.test_file.write("азора\n")
+        self.test_file.write("рОз роза\n")
+
         self.test_file.seek(0)
 
     def test_search_word_found(self):
@@ -39,7 +48,11 @@ class TestSearchInFile(unittest.TestCase):
         self.assertEqual(result, ["а Роза упала на лапу Азора",
                                   "Роза растет в саду",
                                   "Роза и Азора",
-                                  "роза Роза Роз"])
+                                  "роза Роза Роз",
+                                  "РоЗА на траве роз",
+                                  "роза",
+                                  "рОзА",
+                                  "рОз роза"])
 
     def test_stop_word_ignores_line(self):
         """
@@ -51,7 +64,7 @@ class TestSearchInFile(unittest.TestCase):
         result = list(
             file_search_generator(self.test_file,
                                   search_words, stop_words))
-        self.assertEqual(result, ["Роза растет в саду"])
+        self.assertEqual(result, ["Роза растет в саду", "роза", "рОзА"])
 
     def test_no_matches(self):
         """

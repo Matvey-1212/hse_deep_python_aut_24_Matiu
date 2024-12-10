@@ -65,6 +65,71 @@ class TestPredictMessageMood(unittest.TestCase):
         with self.assertRaises(ValueError):
             predict_message_mood("Чапаев и пустота", 0.8, 0.7)
 
+        with self.assertRaises(ValueError):
+            predict_message_mood("Чапаев и пустота", 0.8, 0.7)
+
+    @mock.patch.object(SomeModel, 'predict')
+    def test_predict_with_different_thresholds(self, mock_predict):
+        """
+        Проверяет корректность поведения с разными порогами
+        """
+        mock_predict.return_value = 0.5
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.4, 0.6), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.5, 0.55), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.49999, 0.55), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.50001, 0.55), "неуд")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.2, 0.5), "отл")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.2, 0.50001), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.2, 0.49999), "отл")
+        mock_predict.return_value = 0.85
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.3, 0.8), "отл")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.85, 0.9), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.850001, 0.9), "неуд")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.849999, 0.9), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.4, 0.85), "отл")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.4, 0.85001), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.4, 0.49999), "отл")
+
+        mock_predict.return_value = 0.25
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.3, 0.8), "неуд")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.25, 0.8), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.250001, 0.8), "неуд")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.249999, 0.8), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.05, 0.25), "отл")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.05, 0.250001), "норм")
+        self.assertEqual(predict_message_mood("Чапаев и пустота",
+                                              0.05, 0.249999), "отл")
+
+    @mock.patch.object(SomeModel, 'predict')
+    def test_predict_called_with_correct_message(self, mock_predict):
+        """
+        Проверяет что в predict передается нужные данные
+        """
+        mock_predict.return_value = 0.5
+        message = "Тестовое сообщение"
+        predict_message_mood(message)
+        mock_predict.assert_called_once_with(message)
+
 
 if __name__ == '__main__':
     unittest.main()

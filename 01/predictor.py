@@ -86,7 +86,7 @@ def predict_message_mood(
 
     if prediction < bad_thresholds:
         return "неуд"
-    if prediction > good_thresholds:
+    if prediction >= good_thresholds:
         return "отл"
 
     return "норм"
