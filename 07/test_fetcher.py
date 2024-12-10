@@ -2,7 +2,7 @@
     В файле реализованы тесты для класса Fetcher
 """
 
-import time
+# import time
 import unittest
 import asyncio
 from fetcher import Fetcher
