@@ -1,0 +1,4 @@
+AVG время custom_loads: 0.3192 секунд
+AVG время custom_dumps: 0.6167 секунд
+AVG время loads: 0.3049 секунд
+AVG время dumps: 0.4079 секунд

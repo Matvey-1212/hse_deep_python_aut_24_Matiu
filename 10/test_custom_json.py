@@ -6,6 +6,7 @@ import os
 import json
 import unittest
 import custom_json
+import numpy as np
 
 
 class TestCustomJson(unittest.TestCase):
@@ -98,6 +99,11 @@ class TestCustomJson(unittest.TestCase):
         test_files = [f"generated_data_{i}.json"
                       for i in range(1, 10)]
 
+        custom_loads_times = []
+        custom_dupm_times = []
+        loads_times = []
+        dupm_times = []
+
         for test_file in test_files:
             if not os.path.exists(test_file):
                 self.skipTest(f"Файл {test_file} не найден")
@@ -108,30 +114,38 @@ class TestCustomJson(unittest.TestCase):
             start_time = time.time()
             custom_json.loads(large_json)  # pylint: disable=I1101
             custom_json_duration = time.time() - start_time
-            print(f"custom_json.loads на {test_file}: "
-                  f"{custom_json_duration:.4f} секунд")
+
+            custom_loads_times.append(custom_json_duration)
             self.assertGreater(custom_json_duration, 0.1)
 
             start_time = time.time()
             # pylint: disable=I1101
             custom_json.dumps(custom_json.loads(large_json))
             custom_json_dumps_duration = time.time() - start_time
-            print(f"custom_json.dumps на {test_file}: "
-                  f"{custom_json_dumps_duration:.4f} секунд")
+
+            custom_dupm_times.append(custom_json_dumps_duration)
             self.assertGreater(custom_json_dumps_duration, 0.1)
 
             start_time = time.time()
             json.loads(large_json)
             json_duration = time.time() - start_time
-            print(f"json.loads на {test_file}: {json_duration:.4f} секунд")
+
+            loads_times.append(json_duration)
             self.assertGreater(json_duration, 0.1)
 
             start_time = time.time()
             json.dumps(json.loads(large_json))
             json_dumps_duration = time.time() - start_time
-            print(f"json.dumps на {test_file}: "
-                  f"{json_dumps_duration:.4f} секунд")
+
+            dupm_times.append(json_dumps_duration)
             self.assertGreater(json_dumps_duration, 0.1)
+
+        print("AVG время custom_loads: " +
+              f"{np.mean(custom_loads_times):.4f} секунд")
+        print("AVG время custom_dumps: " +
+              f"{np.mean(custom_dupm_times):.4f} секунд")
+        print(f"AVG время loads: {np.mean(loads_times):.4f} секунд")
+        print(f"AVG время dumps: {np.mean(dupm_times):.4f} секунд")
 
 
 if __name__ == "__main__":
