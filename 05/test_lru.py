@@ -38,9 +38,9 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(self.cache["k1"], "val1")
         self.assertEqual(self.cache["k2"], "val2")
 
-    def test_cache_eviction(self):
+    def test_cache_eviction_via_getitem_and_setite(self):
         """
-            Тест на удаление старого элемента
+            Тест на удаление старого элемента через getitem и setite
         """
         self.cache["k1"] = "val1"
         self.cache["k2"] = "val2"
@@ -50,9 +50,21 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(self.cache["k2"], "val2")
         self.assertEqual(self.cache["k3"], "val3")
 
-    def test_update_value(self):
+    def test_cache_eviction_via_get_and_set(self):
         """
-            Тест обновления значения в элементе
+            Тест на удаление старого элемента через get и set
+        """
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+        self.cache.set("k3", "val3")
+
+        self.assertIsNone(self.cache.get("k1"))
+        self.assertEqual(self.cache.get("k2"), "val2")
+        self.assertEqual(self.cache.get("k3"), "val3")
+
+    def test_update_value_via_getitem_and_setite(self):
+        """
+            Тест обновления значения в элементе через getitem и setite
         """
         self.cache["k1"] = "val1"
         self.cache["k2"] = "val2"
@@ -60,9 +72,19 @@ class TestLRUCache(unittest.TestCase):
         self.cache["k1"] = "new_val1"
         self.assertEqual(self.cache["k1"], "new_val1")
 
-    def test_access_updates_priority(self):
+    def test_update_value_via_get_and_set(self):
         """
-            Тест на обновление порядка доступа
+            Тест обновления значения в элементе через get и set
+        """
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+
+        self.cache.set("k1", "new_val1")
+        self.assertEqual(self.cache.get("k1"), "new_val1")
+
+    def test_access_updates_priority_via_getitem_and_setite(self):
+        """
+            Тест на обновление порядка доступа через getitem и setite
         """
         self.cache["k1"] = "val1"
         self.cache["k2"] = "val2"
@@ -73,9 +95,22 @@ class TestLRUCache(unittest.TestCase):
         self.assertIsNone(self.cache["k2"])
         self.assertEqual(self.cache["k3"], "val3")
 
-    def test_cache_capacity(self):
+    def test_access_updates_priority_via_get_and_set(self):
         """
-            Тест вместимости
+            Тест на обновление порядка доступа через get и set
+        """
+        self.cache.set("k1", "val1")
+        self.cache.set("k2", "val2")
+        self.cache.set("k1", "val1")
+        self.cache.set("k3", "val3")
+
+        self.assertEqual(self.cache.get("k1"), "val1")
+        self.assertIsNone(self.cache.get("k2"))
+        self.assertEqual(self.cache.get("k3"), "val3")
+
+    def test_cache_capacity_via_getitem_and_setite(self):
+        """
+            Тест вместимости через getitem и setite
         """
         cache = LRUCache(1)
         cache["k1"] = "val1"
@@ -84,6 +119,18 @@ class TestLRUCache(unittest.TestCase):
         cache["k2"] = "val2"
         self.assertIsNone(cache["k1"])
         self.assertEqual(cache["k2"], "val2")
+
+    def test_cache_capacity_via_get_and_set(self):
+        """
+            Тест вместимости через get и set
+        """
+        cache = LRUCache(1)
+        cache.set("k1", "val1")
+        self.assertEqual(cache.get("k1"), "val1")
+
+        cache.set("k2", "val2")
+        self.assertIsNone(cache.get("k1"))
+        self.assertEqual(cache.get("k2"), "val2")
 
     def test_invalid_input(self):
         """
