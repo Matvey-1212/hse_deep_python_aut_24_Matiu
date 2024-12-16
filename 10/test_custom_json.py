@@ -4,6 +4,8 @@
 import time
 import os
 import json
+import random
+import string
 import unittest
 import custom_json
 import numpy as np
@@ -13,6 +15,36 @@ class TestCustomJson(unittest.TestCase):
     """
     Класс тестов
     """
+    @classmethod
+    def setUpClass(cls):
+        """
+            Генерация тестовых файлов
+        """
+        cls.test_files = []
+        num_files = 9
+        num = 250000
+
+        for i in range(1, num_files + 1):
+            filename = f"generated_data_{i}.json"
+            cls.test_files.append(filename)
+
+            test_data = {}
+            for i in range(num):
+                test_data[f"test_string_{i}"] = ''.join(
+                    random.choices(string.ascii_letters + string.digits, k=20)
+                    )
+
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(test_data, f, ensure_ascii=False, indent=4)
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+            Удаление тестовых файлов
+        """
+        for filename in cls.test_files:
+            if os.path.exists(filename):
+                os.remove(filename)
 
     def test_custom_json_loads(self):
         """
@@ -74,10 +106,6 @@ class TestCustomJson(unittest.TestCase):
         test_files = [f"generated_data_{i}.json" for i in range(1, 10)]
 
         for test_file in test_files:
-            if not os.path.exists(test_file):
-                # self.skipTest(f"Файл {test_file} не найден")
-                pass
-
             with open(test_file, 'r', encoding='utf-8') as f:
                 data = f.read()
 
@@ -106,10 +134,6 @@ class TestCustomJson(unittest.TestCase):
         dupm_times = []
 
         for test_file in test_files:
-            if not os.path.exists(test_file):
-                # self.skipTest(f"Файл {test_file} не найден")
-                pass
-
             with open(test_file, 'r', encoding='utf-8') as f:
                 large_json = f.read()
 
