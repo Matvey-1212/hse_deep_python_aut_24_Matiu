@@ -22,7 +22,7 @@ class TestCustomJson(unittest.TestCase):
         """
         cls.test_files = []
         num_files = 9
-        num = 250000
+        num = 500000
 
         for i in range(1, num_files + 1):
             filename = f"generated_data_{i}.json"
