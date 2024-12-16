@@ -75,7 +75,8 @@ class TestCustomJson(unittest.TestCase):
 
         for test_file in test_files:
             if not os.path.exists(test_file):
-                self.skipTest(f"Файл {test_file} не найден")
+                # self.skipTest(f"Файл {test_file} не найден")
+                pass
 
             with open(test_file, 'r', encoding='utf-8') as f:
                 data = f.read()
@@ -106,7 +107,8 @@ class TestCustomJson(unittest.TestCase):
 
         for test_file in test_files:
             if not os.path.exists(test_file):
-                self.skipTest(f"Файл {test_file} не найден")
+                # self.skipTest(f"Файл {test_file} не найден")
+                pass
 
             with open(test_file, 'r', encoding='utf-8') as f:
                 large_json = f.read()
