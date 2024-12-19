@@ -136,7 +136,7 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(cache.get("k1"), "val1")
 
         cache.set("k3", "val3")
-        
+
         self.assertEqual(cache.get("k3"), "val3")
         self.assertIsNone(cache.get("k2"))
         self.assertEqual(cache.get("k1"), "val1")
