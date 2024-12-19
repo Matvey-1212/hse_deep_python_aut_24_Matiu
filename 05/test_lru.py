@@ -112,25 +112,34 @@ class TestLRUCache(unittest.TestCase):
         """
             Тест вместимости через getitem и setite
         """
-        cache = LRUCache(1)
+        cache = LRUCache(2)
         cache["k1"] = "val1"
+        cache["k2"] = "val2"
+        self.assertIsNone(cache["k3"])
+        self.assertEqual(cache["k2"], "val2")
         self.assertEqual(cache["k1"], "val1")
 
-        cache["k2"] = "val2"
-        self.assertIsNone(cache["k1"])
-        self.assertEqual(cache["k2"], "val2")
+        cache["k3"] = "val3"
+        self.assertEqual(cache["k3"], "val3")
+        self.assertIsNone(cache["k2"])
+        self.assertEqual(cache["k1"], "val1")
 
     def test_cache_capacity_via_get_and_set(self):
         """
             Тест вместимости через get и set
         """
-        cache = LRUCache(1)
+        cache = LRUCache(2)
         cache.set("k1", "val1")
+        cache.set("k2", "val2")
+        self.assertIsNone(cache.get("k3"))
+        self.assertEqual(cache.get("k2"), "val2")
         self.assertEqual(cache.get("k1"), "val1")
 
-        cache.set("k2", "val2")
-        self.assertIsNone(cache.get("k1"))
-        self.assertEqual(cache.get("k2"), "val2")
+        cache.set("k3", "val3")
+        
+        self.assertEqual(cache.get("k3"), "val3")
+        self.assertIsNone(cache.get("k2"))
+        self.assertEqual(cache.get("k1"), "val1")
 
     def test_invalid_input(self):
         """
